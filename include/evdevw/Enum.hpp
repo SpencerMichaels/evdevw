@@ -9,6 +9,10 @@ namespace evdevw {
   template <typename Enum, typename Raw>
   Enum raw_to_enum(Raw raw);
 
+  template <typename Code>
+  struct event_from_event_code {
+  };
+
 }
 
 #endif //EVDEVW_ENUMCONVERTERS_HPP

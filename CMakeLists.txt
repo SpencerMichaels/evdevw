@@ -10,7 +10,7 @@ endif()
 project(evdevw VERSION 1.0.0)
 
 set(PROJECT_AUTHOR "Spencer Michaels")
-#set(PROJECT_AUTHOR_EMAIL "")
+set(PROJECT_AUTHOR_EMAIL "spencer@smichaels.net")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

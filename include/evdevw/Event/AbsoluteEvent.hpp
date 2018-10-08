@@ -1,6 +1,8 @@
 #ifndef EVDEVW_ABSOLUTEEVENT_HPP
 #define EVDEVW_ABSOLUTEEVENT_HPP
 
+#include <cstdint>
+
 #include "Event.hpp"
 
 namespace evdevw {
@@ -50,13 +52,13 @@ namespace evdevw {
   };
 
   template <>
-  int enum_to_raw<int, AbsoluteEventCode>(AbsoluteEventCode code) {
+  uint16_t enum_to_raw<uint16_t, AbsoluteEventCode>(AbsoluteEventCode code) {
     using UT = std::underlying_type_t<AbsoluteEventCode>;
     return static_cast<UT>(code);
   }
 
   template <>
-  AbsoluteEventCode raw_to_enum<AbsoluteEventCode, int>(int code) {
+  AbsoluteEventCode raw_to_enum<AbsoluteEventCode, uint16_t>(uint16_t code) {
     if (code < ABS_MAX)
       return static_cast<AbsoluteEventCode>(code);
     throw std::runtime_error("Invalid value for enum type!");
@@ -74,10 +76,15 @@ namespace evdevw {
     }
   };
 
+  template <>
+  struct event_from_event_code<AbsoluteEventCode> {
+    using type = AbsoluteEvent;
+  };
+
 }
 
 bool operator==(evdevw::AbsoluteEventCode code1, evdevw::AbsoluteEventCode code2) {
-  return evdevw::enum_to_raw<int>(code1) == evdevw::enum_to_raw<int>(code2);
+  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_ABSOLUTEEVENT_HPP

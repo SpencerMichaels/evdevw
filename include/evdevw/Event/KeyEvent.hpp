@@ -1,6 +1,8 @@
 #ifndef EVDEVW_KYECODE_HPP
 #define EVDEVW_KYECODE_HPP
 
+#include <cstdint>
+
 #include "Event.hpp"
 
 namespace evdevw {
@@ -449,19 +451,136 @@ namespace evdevw {
     Data = KEY_DATA,
     OnscreenKeyboard = KEY_ONSCREEN_KEYBOARD,
     MinInteresting = KEY_MIN_INTERESTING,
+    ButtonMisc = BTN_MISC,
+    Button0 = BTN_0,
+    Button1 = BTN_1,
+    Button2 = BTN_2,
+    Button3 = BTN_3,
+    Button4 = BTN_4,
+    Button5 = BTN_5,
+    Button6 = BTN_6,
+    Button7 = BTN_7,
+    Button8 = BTN_8,
+    Button9 = BTN_9,
+    ButtonMouse = BTN_MOUSE,
+    ButtonLeft = BTN_LEFT,
+    ButtonRight = BTN_RIGHT,
+    ButtonMiddle = BTN_MIDDLE,
+    ButtonSide = BTN_SIDE,
+    ButtonExtra = BTN_EXTRA,
+    ButtonForward = BTN_FORWARD,
+    ButtonBack = BTN_BACK,
+    ButtonTask = BTN_TASK,
+    ButtonJoystick = BTN_JOYSTICK,
+    ButtonTrigger = BTN_TRIGGER,
+    ButtonThumb = BTN_THUMB,
+    ButtonThumb2 = BTN_THUMB2,
+    ButtonTop = BTN_TOP,
+    ButtonTop2 = BTN_TOP2,
+    ButtonPinkie = BTN_PINKIE,
+    ButtonBase = BTN_BASE,
+    ButtonBase2 = BTN_BASE2,
+    ButtonBase3 = BTN_BASE3,
+    ButtonBase4 = BTN_BASE4,
+    ButtonBase5 = BTN_BASE5,
+    ButtonBase6 = BTN_BASE6,
+    ButtonDead = BTN_DEAD,
+    ButtonGamepad = BTN_GAMEPAD,
+    ButtonSouth = BTN_SOUTH,
+    ButtonA = BTN_A,
+    ButtonEast = BTN_EAST,
+    ButtonB = BTN_B,
+    ButtonC = BTN_C,
+    ButtonNorth = BTN_NORTH,
+    ButtonX = BTN_X,
+    ButtonWest = BTN_WEST,
+    ButtonY = BTN_Y,
+    ButtonZ = BTN_Z,
+    ButtonTl = BTN_TL,
+    ButtonTr = BTN_TR,
+    ButtonTl2 = BTN_TL2,
+    ButtonTr2 = BTN_TR2,
+    ButtonSelect = BTN_SELECT,
+    ButtonStart = BTN_START,
+    ButtonMode = BTN_MODE,
+    ButtonThumbl = BTN_THUMBL,
+    ButtonThumbr = BTN_THUMBR,
+    ButtonDigi = BTN_DIGI,
+    ButtonToolPen = BTN_TOOL_PEN,
+    ButtonToolRubber = BTN_TOOL_RUBBER,
+    ButtonToolBrush = BTN_TOOL_BRUSH,
+    ButtonToolPencil = BTN_TOOL_PENCIL,
+    ButtonToolAirbrush = BTN_TOOL_AIRBRUSH,
+    ButtonToolFinger = BTN_TOOL_FINGER,
+    ButtonToolMouse = BTN_TOOL_MOUSE,
+    ButtonToolLens = BTN_TOOL_LENS,
+    ButtonToolQuinttap = BTN_TOOL_QUINTTAP,
+    ButtonStylus3 = BTN_STYLUS3,
+    ButtonTouch = BTN_TOUCH,
+    ButtonStylus = BTN_STYLUS,
+    ButtonStylus2 = BTN_STYLUS2,
+    ButtonToolDoubletap = BTN_TOOL_DOUBLETAP,
+    ButtonToolTripletap = BTN_TOOL_TRIPLETAP,
+    ButtonToolQuadtap = BTN_TOOL_QUADTAP,
+    ButtonWheel = BTN_WHEEL,
+    ButtonGearDown = BTN_GEAR_DOWN,
+    ButtonGearUp = BTN_GEAR_UP,
+    ButtonDpadUp = BTN_DPAD_UP,
+    ButtonDpadDown = BTN_DPAD_DOWN,
+    ButtonDpadLeft = BTN_DPAD_LEFT,
+    ButtonDpadRight = BTN_DPAD_RIGHT,
+    ButtonTriggerHappy = BTN_TRIGGER_HAPPY,
+    ButtonTriggerHappy1 = BTN_TRIGGER_HAPPY1,
+    ButtonTriggerHappy2 = BTN_TRIGGER_HAPPY2,
+    ButtonTriggerHappy3 = BTN_TRIGGER_HAPPY3,
+    ButtonTriggerHappy4 = BTN_TRIGGER_HAPPY4,
+    ButtonTriggerHappy5 = BTN_TRIGGER_HAPPY5,
+    ButtonTriggerHappy6 = BTN_TRIGGER_HAPPY6,
+    ButtonTriggerHappy7 = BTN_TRIGGER_HAPPY7,
+    ButtonTriggerHappy8 = BTN_TRIGGER_HAPPY8,
+    ButtonTriggerHappy9 = BTN_TRIGGER_HAPPY9,
+    ButtonTriggerHappy10 = BTN_TRIGGER_HAPPY10,
+    ButtonTriggerHappy11 = BTN_TRIGGER_HAPPY11,
+    ButtonTriggerHappy12 = BTN_TRIGGER_HAPPY12,
+    ButtonTriggerHappy13 = BTN_TRIGGER_HAPPY13,
+    ButtonTriggerHappy14 = BTN_TRIGGER_HAPPY14,
+    ButtonTriggerHappy15 = BTN_TRIGGER_HAPPY15,
+    ButtonTriggerHappy16 = BTN_TRIGGER_HAPPY16,
+    ButtonTriggerHappy17 = BTN_TRIGGER_HAPPY17,
+    ButtonTriggerHappy18 = BTN_TRIGGER_HAPPY18,
+    ButtonTriggerHappy19 = BTN_TRIGGER_HAPPY19,
+    ButtonTriggerHappy20 = BTN_TRIGGER_HAPPY20,
+    ButtonTriggerHappy21 = BTN_TRIGGER_HAPPY21,
+    ButtonTriggerHappy22 = BTN_TRIGGER_HAPPY22,
+    ButtonTriggerHappy23 = BTN_TRIGGER_HAPPY23,
+    ButtonTriggerHappy24 = BTN_TRIGGER_HAPPY24,
+    ButtonTriggerHappy25 = BTN_TRIGGER_HAPPY25,
+    ButtonTriggerHappy26 = BTN_TRIGGER_HAPPY26,
+    ButtonTriggerHappy27 = BTN_TRIGGER_HAPPY27,
+    ButtonTriggerHappy28 = BTN_TRIGGER_HAPPY28,
+    ButtonTriggerHappy29 = BTN_TRIGGER_HAPPY29,
+    ButtonTriggerHappy30 = BTN_TRIGGER_HAPPY30,
+    ButtonTriggerHappy31 = BTN_TRIGGER_HAPPY31,
+    ButtonTriggerHappy32 = BTN_TRIGGER_HAPPY32,
+    ButtonTriggerHappy33 = BTN_TRIGGER_HAPPY33,
+    ButtonTriggerHappy34 = BTN_TRIGGER_HAPPY34,
+    ButtonTriggerHappy35 = BTN_TRIGGER_HAPPY35,
+    ButtonTriggerHappy36 = BTN_TRIGGER_HAPPY36,
+    ButtonTriggerHappy37 = BTN_TRIGGER_HAPPY37,
+    ButtonTriggerHappy38 = BTN_TRIGGER_HAPPY38,
+    ButtonTriggerHappy39 = BTN_TRIGGER_HAPPY39,
+    ButtonTriggerHappy40 = BTN_TRIGGER_HAPPY40,
   };
 
   template <>
-  int enum_to_raw<int, KeyEventCode>(KeyEventCode code) {
+  uint16_t enum_to_raw<uint16_t, KeyEventCode>(KeyEventCode code) {
     using UT = std::underlying_type_t<KeyEventCode>;
     return static_cast<UT>(code);
   }
 
   template <>
-  KeyEventCode raw_to_enum<KeyEventCode, int>(int code) {
-    if (code >= KEY_MAX)
-      return static_cast<KeyEventCode>(code);
-    throw std::runtime_error("Invalid value for enum type!");
+  KeyEventCode raw_to_enum<KeyEventCode, uint16_t>(uint16_t code) {
+    return static_cast<KeyEventCode>(code);
   }
 
   struct KeyEvent : public Event<EV_KEY, KeyEventCode> {
@@ -476,10 +595,15 @@ namespace evdevw {
     }
   };
 
+  template <>
+  struct event_from_event_code<KeyEventCode> {
+    using type = KeyEvent;
+  };
+
 }
 
 bool operator==(evdevw::KeyEventCode code1, evdevw::KeyEventCode code2) {
-  return evdevw::enum_to_raw<int>(code1) == evdevw::enum_to_raw<int>(code2);
+  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_KYECODE_HPP
