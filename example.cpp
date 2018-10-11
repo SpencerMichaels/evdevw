@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "include/evdevw.hpp"
+#include <evdevw.hpp>
 
 // The code below is a translation of the example on libevdev's main page:
 // https://www.freedesktop.org/wiki/Software/libevdev/

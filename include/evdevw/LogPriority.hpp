@@ -12,20 +12,8 @@ namespace evdevw {
   };
 
   template <>
-  int enum_to_raw<int, LogPriority>(LogPriority code) {
-    using UT = std::underlying_type_t<LogPriority>;
-    return static_cast<UT>(code);
-  }
+  struct convert_enum<LogPriority> : public _convert_enum_impl<LogPriority, libevdev_log_priority, (libevdev_log_priority)0> {};
 
-  template <>
-  LogPriority raw_to_enum<LogPriority, int>(int code) {
-    return static_cast<LogPriority>(code);
-  }
-
-}
-
-bool operator==(evdevw::LogPriority code1, evdevw::LogPriority code2) {
-  return evdevw::enum_to_raw<int>(code1) == evdevw::enum_to_raw<int>(code2);
 }
 
 #endif //EVDEVW_LOGPRIORITY_HPP

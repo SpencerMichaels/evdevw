@@ -21,17 +21,7 @@ namespace evdevw {
   };
 
   template <>
-  uint16_t enum_to_raw<uint16_t, RelativeEventCode>(RelativeEventCode code) {
-    using UT = std::underlying_type_t<RelativeEventCode>;
-    return static_cast<UT>(code);
-  }
-
-  template <>
-  RelativeEventCode raw_to_enum<RelativeEventCode, uint16_t>(uint16_t code) {
-    if (code < REL_MAX)
-      return static_cast<RelativeEventCode>(code);
-    throw std::runtime_error("Invalid value for enum type!");
-  }
+  struct convert_enum<RelativeEventCode> : public _convert_enum_impl<RelativeEventCode, uint16_t, REL_MAX> {};
 
   struct RelativeEvent : public Event<EV_REL, RelativeEventCode> {
     RelativeEvent(RelativeEventCode code, Value value)
@@ -50,10 +40,6 @@ namespace evdevw {
     using type = RelativeEvent;
   };
 
-}
-
-bool operator==(evdevw::RelativeEventCode code1, evdevw::RelativeEventCode code2) {
-  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_RELATIVEEVENT_HPP

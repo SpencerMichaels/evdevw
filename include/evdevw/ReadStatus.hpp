@@ -11,15 +11,7 @@ namespace evdevw {
   };
 
   template <>
-  int enum_to_raw<int, ReadStatus>(ReadStatus code) {
-    using UT = std::underlying_type_t<ReadStatus>;
-    return static_cast<UT>(code);
-  }
-
-  template <>
-  ReadStatus raw_to_enum<ReadStatus, int>(int code) {
-    return static_cast<ReadStatus>(code);
-  }
+  struct convert_enum<ReadStatus> : public _convert_enum_impl<ReadStatus, int, 0> {};
 
 }
 

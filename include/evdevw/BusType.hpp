@@ -36,22 +36,8 @@ namespace evdevw {
   };
 
   template <>
-  int enum_to_raw<int, BusType>(BusType code) {
-    using UT = std::underlying_type_t<BusType>;
-    return static_cast<UT>(code);
-  }
+  struct convert_enum<BusType> : public _convert_enum_impl<BusType, int, BUS_INTEL_ISHTP+1> {};
 
-  template <>
-  BusType raw_to_enum<BusType, int>(int code) {
-    if (code <= BUS_INTEL_ISHTP)
-      return static_cast<BusType>(code);
-    throw std::runtime_error("Invalid value for enum type!");
-  }
-
-}
-
-bool operator==(evdevw::BusType code1, evdevw::BusType code2) {
-  return evdevw::enum_to_raw<int>(code1) == evdevw::enum_to_raw<int>(code2);
 }
 
 #endif //EVDEVW_BUSTYPE_HPP

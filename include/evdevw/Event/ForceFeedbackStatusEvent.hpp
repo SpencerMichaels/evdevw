@@ -13,17 +13,7 @@ namespace evdevw {
   };
 
   template <>
-  uint16_t enum_to_raw<uint16_t, ForceFeedbackStatusEventCode>(ForceFeedbackStatusEventCode code) {
-    using UT = std::underlying_type_t<ForceFeedbackStatusEventCode>;
-    return static_cast<UT>(code);
-  }
-
-  template <>
-  ForceFeedbackStatusEventCode raw_to_enum<ForceFeedbackStatusEventCode, uint16_t>(uint16_t code) {
-    if (code < FF_STATUS_MAX)
-      return static_cast<ForceFeedbackStatusEventCode>(code);
-    throw std::runtime_error("Invalid value for enum type!");
-  }
+  struct convert_enum<ForceFeedbackStatusEventCode> : public _convert_enum_impl<ForceFeedbackStatusEventCode, uint16_t, FF_STATUS_MAX> {};
 
   struct ForceFeedbackStatusEvent : public Event<EV_FF_STATUS, ForceFeedbackStatusEventCode> {
     ForceFeedbackStatusEvent(ForceFeedbackStatusEventCode code, Value value)
@@ -42,10 +32,6 @@ namespace evdevw {
     using type = ForceFeedbackStatusEvent;
   };
 
-}
-
-bool operator==(evdevw::ForceFeedbackStatusEventCode code1, evdevw::ForceFeedbackStatusEventCode code2) {
-  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_FORCEFEEDBACKSTATUSEVENT_HPP

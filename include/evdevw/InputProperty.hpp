@@ -16,18 +16,10 @@ namespace evdevw {
   };
 
   template <>
-  int enum_to_raw<int, InputProperty>(InputProperty code) {
-    using UT = std::underlying_type_t<InputProperty>;
-    return static_cast<UT>(code);
-  }
-
-  template <>
-  InputProperty raw_to_enum<InputProperty, int>(int code) {
-    return static_cast<InputProperty>(code);
-  }
+  struct convert_enum<InputProperty> : public _convert_enum_impl<InputProperty, int, 0> {};
 
   std::string input_property_get_name(InputProperty input_property) {
-    return libevdev_property_get_name(enum_to_raw<int>(input_property));
+    return libevdev_property_get_name(enum_to_raw(input_property));
   }
 
   std::optional<InputProperty> input_property_from_name(const std::string &name) {
@@ -37,10 +29,6 @@ namespace evdevw {
     return raw_to_enum<InputProperty>(raw_input_property);
   }
 
-}
-
-bool operator==(evdevw::InputProperty code1, evdevw::InputProperty code2) {
-  return evdevw::enum_to_raw<int>(code1) == evdevw::enum_to_raw<int>(code2);
 }
 
 #endif //EVDEVW_INPUTPROPERTY_HPP

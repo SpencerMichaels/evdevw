@@ -11,14 +11,7 @@ namespace evdevw {
   };
 
   template <>
-  uint16_t enum_to_raw<uint16_t, PowerEventCode>(PowerEventCode code) {
-    return 0;
-  }
-
-  template <>
-  PowerEventCode raw_to_enum<PowerEventCode, uint16_t>(uint16_t code) {
-    throw std::runtime_error("Invalid value for enum type!");
-  }
+  struct convert_enum<PowerEventCode> : public _convert_enum_impl<PowerEventCode, uint16_t, 0> {};
 
   struct PowerEvent : public Event<EV_PWR, PowerEventCode> {
     PowerEvent(PowerEventCode code, Value value)
@@ -37,10 +30,6 @@ namespace evdevw {
     using type = PowerEvent;
   };
 
-}
-
-bool operator==(evdevw::PowerEventCode code1, evdevw::PowerEventCode code2) {
-  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_POWEREVENT_HPP

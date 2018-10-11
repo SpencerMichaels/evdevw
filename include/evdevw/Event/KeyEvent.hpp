@@ -573,15 +573,8 @@ namespace evdevw {
   };
 
   template <>
-  uint16_t enum_to_raw<uint16_t, KeyEventCode>(KeyEventCode code) {
-    using UT = std::underlying_type_t<KeyEventCode>;
-    return static_cast<UT>(code);
-  }
-
   template <>
-  KeyEventCode raw_to_enum<KeyEventCode, uint16_t>(uint16_t code) {
-    return static_cast<KeyEventCode>(code);
-  }
+  struct convert_enum<KeyEventCode> : public _convert_enum_impl<KeyEventCode, uint16_t, KEY_MAX> {};
 
   struct KeyEvent : public Event<EV_KEY, KeyEventCode> {
     KeyEvent(KeyEventCode code, Value value)
@@ -600,10 +593,6 @@ namespace evdevw {
     using type = KeyEvent;
   };
 
-}
-
-bool operator==(evdevw::KeyEventCode code1, evdevw::KeyEventCode code2) {
-  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_KYECODE_HPP

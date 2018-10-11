@@ -8,26 +8,12 @@
 namespace evdevw {
 
   enum class LedValue {
-    On = 0,
-    Off = 1,
+    On = LIBEVDEV_LED_ON,
+    Off = LIBEVDEV_LED_OFF,
   };
 
   template <>
-  libevdev_led_value enum_to_raw<libevdev_led_value, LedValue>(LedValue code) {
-    switch (code) {
-      case LedValue::On:
-      return LIBEVDEV_LED_ON;
-      case LedValue::Off:
-        return LIBEVDEV_LED_OFF;
-    }
-  }
-
-  template <>
-  LedValue raw_to_enum<LedValue, libevdev_led_value>(libevdev_led_value code) {
-    if (code < 2)
-      throw std::runtime_error("Invalid value for enum type!");
-    return static_cast<LedValue>(code);
-  }
+  struct convert_enum<LedValue> : public _convert_enum_impl<LedValue, libevdev_led_value, (libevdev_led_value)0> {};
 
   enum class LedEventCode {
     Numl = LED_NUML,
@@ -44,17 +30,7 @@ namespace evdevw {
   };
 
   template <>
-  uint16_t enum_to_raw<uint16_t, LedEventCode>(LedEventCode code) {
-    using UT = std::underlying_type_t<LedEventCode>;
-    return static_cast<UT>(code);
-  }
-
-  template <>
-  LedEventCode raw_to_enum<LedEventCode, uint16_t>(uint16_t code) {
-    if (code < LED_MAX)
-      return static_cast<LedEventCode>(code);
-    throw std::runtime_error("Invalid value for enum type!");
-  }
+  struct convert_enum<LedEventCode> : public _convert_enum_impl<LedEventCode, uint16_t, LED_MAX> {};
 
   struct LedEvent : public Event<EV_LED, LedEventCode> {
     LedEvent(LedEventCode code, Value value)
@@ -73,10 +49,6 @@ namespace evdevw {
     using type = LedEvent;
   };
 
-}
-
-bool operator==(evdevw::LedEventCode code1, evdevw::LedEventCode code2) {
-  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_LEDEVENT_HPP

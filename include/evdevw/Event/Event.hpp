@@ -15,15 +15,6 @@ namespace evdevw {
 
     static const int type = _type;
 
-    /*
-    static std::string get_type_name() {
-      return libevdev_event_type_get_name(type);
-    }
-    static std::string get_code_name(Code code) {
-      return libevdev_event_code_get_name(type, enum_to_raw(code));
-    }
-     */
-
   public:
     Event(Code code, Value value)
       : _code(code), _value(value)
@@ -31,14 +22,14 @@ namespace evdevw {
     }
 
     Event(struct input_event event)
-        : _code(raw_to_enum<Code, uint16_t>(event.code)), _value(event.value)
+        : _code(raw_to_enum<Code>(event.code)), _value(event.value)
     {
       if (event.type != type)
         throw std::runtime_error("Event type mismatch!");
     }
 
     Event(uint16_t raw_code, Value value)
-      : _code(evdevw::raw_to_enum<Code>(raw_code)), _value(value)
+      : _code(raw_to_enum<Code>(raw_code)), _value(value)
     {
     }
 
@@ -62,7 +53,7 @@ namespace evdevw {
       return libevdev_event_type_get_name(type);
     }
     std::string get_code_name() const {
-      return libevdev_event_code_get_name(type, enum_to_raw<uint16_t>(_code));
+      return libevdev_event_code_get_name(type, enum_to_raw(_code));
     }
 
   private:
@@ -78,7 +69,7 @@ namespace evdevw {
 
   template <typename E>
   std::string get_code_name(typename E::Code code) {
-    return libevdev_event_code_get_name(E::type, enum_to_raw<uint16_t>(code));
+    return libevdev_event_code_get_name(E::type, enum_to_raw(code));
   }
 
 }

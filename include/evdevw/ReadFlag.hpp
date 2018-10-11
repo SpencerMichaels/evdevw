@@ -15,15 +15,7 @@ namespace evdevw {
   };
 
   template <>
-  uint16_t enum_to_raw<uint16_t, ReadFlag>(ReadFlag code) {
-    using UT = std::underlying_type_t<ReadFlag>;
-    return static_cast<UT>(code);
-  }
-
-  template <>
-  ReadFlag raw_to_enum<ReadFlag, uint16_t>(uint16_t code) {
-    return static_cast<ReadFlag>(code);
-  }
+  struct convert_enum<ReadFlag> : public _convert_enum_impl<ReadFlag, int, 0> {};
 
 }
 

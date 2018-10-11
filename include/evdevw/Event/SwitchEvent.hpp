@@ -28,17 +28,7 @@ namespace evdevw {
   };
 
   template <>
-  uint16_t enum_to_raw<uint16_t, SwitchEventCode>(SwitchEventCode code) {
-    using UT = std::underlying_type_t<SwitchEventCode>;
-    return static_cast<UT>(code);
-  }
-
-  template <>
-  SwitchEventCode raw_to_enum<SwitchEventCode, uint16_t>(uint16_t code) {
-    if (code < SW_MAX)
-      return static_cast<SwitchEventCode>(code);
-    throw std::runtime_error("Invalid value for enum type!");
-  }
+  struct convert_enum<SwitchEventCode> : public _convert_enum_impl<SwitchEventCode, uint16_t, SW_MAX> {};
 
   struct SwitchEvent : public Event<EV_SW, SwitchEventCode> {
     SwitchEvent(SwitchEventCode code, Value value)
@@ -57,10 +47,6 @@ namespace evdevw {
     using type = SwitchEvent;
   };
 
-}
-
-bool operator==(evdevw::SwitchEventCode code1, evdevw::SwitchEventCode code2) {
-  return evdevw::enum_to_raw<uint16_t>(code1) == evdevw::enum_to_raw<uint16_t>(code2);
 }
 
 #endif //EVDEVW_SWITCHEVENT_HPP

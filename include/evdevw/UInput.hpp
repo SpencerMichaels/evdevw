@@ -56,7 +56,7 @@ namespace evdevw {
 
     template <typename E>
     void _write_event(const E &event) {
-      if (const auto err = libevdev_uinput_write_event(raw(), E::type, enum_to_raw<int>(event.get_code()), event.get_value()))
+      if (const auto err = libevdev_uinput_write_event(raw(), E::type, enum_to_raw(event.get_code()), event.get_value()))
         throw Exception(-err);
     }
   };
