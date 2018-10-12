@@ -12,25 +12,8 @@ namespace evdevw {
     Playing = FF_STATUS_PLAYING,
   };
 
-  template <>
-  struct convert_enum<ForceFeedbackStatusEventCode> : public _convert_enum_impl<ForceFeedbackStatusEventCode, uint16_t, FF_STATUS_MAX> {};
-
-  struct ForceFeedbackStatusEvent : public Event<EV_FF_STATUS, ForceFeedbackStatusEventCode> {
-    ForceFeedbackStatusEvent(ForceFeedbackStatusEventCode code, Value value)
-      : Event(code, value)
-    {
-    }
-
-    ForceFeedbackStatusEvent(struct input_event event)
-      : Event(event)
-    {
-    }
-  };
-
-  template <>
-  struct event_from_event_code<ForceFeedbackStatusEventCode > {
-    using type = ForceFeedbackStatusEvent;
-  };
+  DECLARE_ENUM_CONVERTER(ForceFeedbackStatusEventCode, uint16_t, FF_STATUS_MAX);
+  DECLARE_EVENT_TYPE(EV_FF_STATUS, ForceFeedbackStatusEvent, ForceFeedbackStatusEventCode, int);
 
 }
 

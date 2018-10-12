@@ -572,26 +572,15 @@ namespace evdevw {
     ButtonTriggerHappy40 = BTN_TRIGGER_HAPPY40,
   };
 
-  template <>
-  template <>
-  struct convert_enum<KeyEventCode> : public _convert_enum_impl<KeyEventCode, uint16_t, KEY_MAX> {};
-
-  struct KeyEvent : public Event<EV_KEY, KeyEventCode> {
-    KeyEvent(KeyEventCode code, Value value)
-      : Event(code, value)
-    {
-    }
-
-    KeyEvent(struct input_event event)
-      : Event(event)
-    {
-    }
+  enum class KeyEventValue {
+    Down = 0,
+    Up = 1,
+    Repeat = 2,
   };
 
-  template <>
-  struct event_from_event_code<KeyEventCode> {
-    using type = KeyEvent;
-  };
+  DECLARE_ENUM_CONVERTER(KeyEventCode, uint16_t, KEY_MAX);
+  DECLARE_ENUM_CONVERTER(KeyEventValue, uint16_t, 3);
+  DECLARE_EVENT_TYPE(EV_KEY, KeyEvent, KeyEventCode, KeyEventValue);
 
 }
 

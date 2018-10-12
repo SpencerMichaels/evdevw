@@ -394,8 +394,8 @@ namespace evdevw {
         throw Exception(err);
     }
 
-    void kernel_set_led_value(LedEventCode code, LedValue value) const {
-      if (const auto err = libevdev_kernel_set_led_value(raw(), enum_to_raw(code), enum_to_raw(value)))
+    void kernel_set_led_value(LedEventCode code, LedEventValue value) const {
+      if (const auto err = libevdev_kernel_set_led_value(raw(), enum_to_raw(code), (libevdev_led_value)enum_to_raw(value)))
         throw Exception(err);
     }
 
@@ -496,9 +496,10 @@ namespace evdevw {
     }
 
     template <typename... Tail>
-    static auto convert_led_code_value(LedEventCode head_code, LedValue head_value, Tail... tail) {
+    static auto convert_led_code_value(LedEventCode head_code, LedEventValue head_value, Tail... tail) {
       return std::tuple_cat(std::make_tuple(
-          enum_to_raw(head_value)),
+          enum_to_raw(head_code),
+          (libevdev_led_value)enum_to_raw(head_value)),
           Evdev::convert_led_code_value(tail...));
     }
 

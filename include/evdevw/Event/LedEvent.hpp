@@ -7,14 +7,6 @@
 
 namespace evdevw {
 
-  enum class LedValue {
-    On = LIBEVDEV_LED_ON,
-    Off = LIBEVDEV_LED_OFF,
-  };
-
-  template <>
-  struct convert_enum<LedValue> : public _convert_enum_impl<LedValue, libevdev_led_value, (libevdev_led_value)0> {};
-
   enum class LedEventCode {
     Numl = LED_NUML,
     Capsl = LED_CAPSL,
@@ -29,25 +21,15 @@ namespace evdevw {
     Charging = LED_CHARGING,
   };
 
-  template <>
-  struct convert_enum<LedEventCode> : public _convert_enum_impl<LedEventCode, uint16_t, LED_MAX> {};
-
-  struct LedEvent : public Event<EV_LED, LedEventCode> {
-    LedEvent(LedEventCode code, Value value)
-      : Event(code, value)
-    {
-    }
-
-    LedEvent(struct input_event event)
-      : Event(event)
-    {
-    }
+  enum class LedEventValue {
+    On = LIBEVDEV_LED_ON,
+    Off = LIBEVDEV_LED_OFF,
   };
 
-  template <>
-  struct event_from_event_code<LedEventCode> {
-    using type = LedEvent;
-  };
+  DECLARE_ENUM_CONVERTER(LedEventCode, uint16_t, LED_MAX);
+  //DECLARE_ENUM_CONVERTER(LedEventValue, libevdev_led_value, (libevdev_led_value)0);
+  DECLARE_ENUM_CONVERTER(LedEventValue, int, 0);
+  DECLARE_EVENT_TYPE(EV_LED, LedEvent, LedEventCode, LedEventValue);
 
 }
 

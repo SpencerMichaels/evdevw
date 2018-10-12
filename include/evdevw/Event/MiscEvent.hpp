@@ -16,25 +16,8 @@ namespace evdevw {
     Timestamp = MSC_TIMESTAMP,
   };
 
-  template <>
-  struct convert_enum<MiscEventCode> : public _convert_enum_impl<MiscEventCode, uint16_t, MSC_MAX> {};
-
-  struct MiscEvent : public Event<EV_MSC, MiscEventCode> {
-    MiscEvent(MiscEventCode code, Value value)
-      : Event(code, value)
-    {
-    }
-
-    MiscEvent(struct input_event event)
-      : Event(event)
-    {
-    }
-  };
-
-  template <>
-  struct event_from_event_code<MiscEventCode> {
-    using type = MiscEvent;
-  };
+  DECLARE_ENUM_CONVERTER(MiscEventCode, uint16_t, MSC_MAX);
+  DECLARE_EVENT_TYPE(EV_MSC, MiscEvent, MiscEventCode, int);
 
 }
 

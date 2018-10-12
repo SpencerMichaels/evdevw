@@ -31,25 +31,8 @@ namespace evdevw {
     MaxEffects = FF_MAX_EFFECTS,
   };
 
-  template <>
-  struct convert_enum<ForceFeedbackEventCode> : public _convert_enum_impl<ForceFeedbackEventCode, uint16_t, FF_MAX> {};
-
-  struct ForceFeedbackEvent : public Event<EV_FF, ForceFeedbackEventCode> {
-    ForceFeedbackEvent(ForceFeedbackEventCode code, Value value)
-      : Event(code, value)
-    {
-    }
-
-    ForceFeedbackEvent(struct input_event event)
-      : Event(event)
-    {
-    }
-  };
-
-  template <>
-  struct event_from_event_code<ForceFeedbackEventCode > {
-    using type = ForceFeedbackEvent;
-  };
+  DECLARE_ENUM_CONVERTER(ForceFeedbackEventCode, uint16_t, FF_MAX);
+  DECLARE_EVENT_TYPE(EV_FF, ForceFeedbackEvent, ForceFeedbackEventCode, int);
 
 }
 

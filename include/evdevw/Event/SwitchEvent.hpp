@@ -27,25 +27,8 @@ namespace evdevw {
     PenInserted = SW_PEN_INSERTED,
   };
 
-  template <>
-  struct convert_enum<SwitchEventCode> : public _convert_enum_impl<SwitchEventCode, uint16_t, SW_MAX> {};
-
-  struct SwitchEvent : public Event<EV_SW, SwitchEventCode> {
-    SwitchEvent(SwitchEventCode code, Value value)
-    : Event(code, value)
-    {
-    }
-
-    SwitchEvent(struct input_event event)
-        : Event(event)
-    {
-    }
-  };
-
-  template <>
-  struct event_from_event_code<SwitchEventCode> {
-    using type = SwitchEvent;
-  };
+  DECLARE_ENUM_CONVERTER(SwitchEventCode, uint16_t, SW_MAX);
+  DECLARE_EVENT_TYPE(EV_SW, SwitchEvent, SwitchEventCode, int);
 
 }
 

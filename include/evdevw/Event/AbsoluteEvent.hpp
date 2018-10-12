@@ -51,25 +51,8 @@ namespace evdevw {
     MtToolY = ABS_MT_TOOL_Y,
   };
 
-  template <>
-  struct convert_enum<AbsoluteEventCode> : public _convert_enum_impl<AbsoluteEventCode, uint16_t, ABS_MAX> {};
-
-  struct AbsoluteEvent : public Event<EV_ABS, AbsoluteEventCode> {
-    AbsoluteEvent(AbsoluteEventCode code, Value value)
-      : Event<EV_ABS, AbsoluteEventCode>(code, value)
-    {
-    }
-
-    AbsoluteEvent(struct input_event event)
-      : Event<EV_ABS, AbsoluteEventCode>(event)
-    {
-    }
-  };
-
-  template <>
-  struct event_from_event_code<AbsoluteEventCode> {
-    using type = AbsoluteEvent;
-  };
+  DECLARE_ENUM_CONVERTER(AbsoluteEventCode, uint16_t, ABS_MAX);
+  DECLARE_EVENT_TYPE(EV_ABS, AbsoluteEvent, AbsoluteEventCode, int);
 
 }
 

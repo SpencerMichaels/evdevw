@@ -1,6 +1,10 @@
 #ifndef EVDEVW_ENUMCONVERTERS_HPP
 #define EVDEVW_ENUMCONVERTERS_HPP
 
+#define DECLARE_ENUM_CONVERTER(_code_type, _raw_type, _max) \
+template <> \
+struct convert_enum<_code_type> : public _convert_enum_impl<_code_type, _raw_type, _max> {};
+
 namespace evdevw {
 
   template <typename Enum, typename Raw, Raw _max>

@@ -20,25 +20,8 @@ namespace evdevw {
     Misc = REL_MISC,
   };
 
-  template <>
-  struct convert_enum<RelativeEventCode> : public _convert_enum_impl<RelativeEventCode, uint16_t, REL_MAX> {};
-
-  struct RelativeEvent : public Event<EV_REL, RelativeEventCode> {
-    RelativeEvent(RelativeEventCode code, Value value)
-      : Event(code, value)
-    {
-    }
-
-    RelativeEvent(struct input_event event)
-      : Event(event)
-    {
-    }
-  };
-
-  template <>
-  struct event_from_event_code<RelativeEventCode> {
-    using type = RelativeEvent;
-  };
+  DECLARE_ENUM_CONVERTER(RelativeEventCode, uint16_t, REL_MAX);
+  DECLARE_EVENT_TYPE(EV_REL, RelativeEvent, RelativeEventCode, int);
 
 }
 

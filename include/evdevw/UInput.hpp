@@ -14,7 +14,7 @@ namespace evdevw {
     using Resource = struct libevdev_uinput;
     using ResourceRawPtr = Resource*;
 
-    UInput(const Evdev& evdev, int uinput_fd)
+    UInput(const Evdev& evdev, int uinput_fd = LIBEVDEV_UINPUT_OPEN_MANAGED)
       : _uinput(nullptr, &libevdev_uinput_destroy)
     {
       Resource *uinput_raw;
@@ -56,7 +56,7 @@ namespace evdevw {
 
     template <typename E>
     void _write_event(const E &event) {
-      if (const auto err = libevdev_uinput_write_event(raw(), E::type, enum_to_raw(event.get_code()), event.get_value()))
+      if (const auto err = libevdev_uinput_write_event(raw(), E::type, event.get_raw_code(), event.get_raw_value()))
         throw Exception(-err);
     }
   };

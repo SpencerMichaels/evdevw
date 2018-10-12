@@ -14,25 +14,8 @@ namespace evdevw {
     Dropped = SYN_DROPPED,
   };
 
-  template <>
-  struct convert_enum<SynchronizeEventCode> : public _convert_enum_impl<SynchronizeEventCode, uint16_t, SYN_MAX> {};
-
-  struct SynchronizeEvent : public Event<EV_SYN, SynchronizeEventCode> {
-    SynchronizeEvent(SynchronizeEventCode code, Value value)
-    : Event(code, value)
-    {
-    }
-
-    SynchronizeEvent(struct input_event event)
-        : Event(event)
-    {
-    }
-  };
-
-  template <>
-  struct event_from_event_code<SynchronizeEventCode> {
-    using type = SynchronizeEvent;
-  };
+  DECLARE_ENUM_CONVERTER(SynchronizeEventCode, uint16_t, SYN_MAX);
+  DECLARE_EVENT_TYPE(EV_SYN, SynchronizeEvent, SynchronizeEventCode, int);
 
 }
 
