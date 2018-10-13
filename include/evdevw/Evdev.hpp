@@ -234,16 +234,20 @@ namespace evdevw {
       return AbsoluteInfo(*abs_info);
     }
 
-    template <typename E>
-    int get_event_value(E event, typename E::Code code) const {
-      return libevdev_get_event_value(raw(), enum_to_raw(code));
+    template <typename Code>
+    typename event_from_event_code<Code>::type::Value
+    get_event_value(Code code) const {
+      using E = event_from_event_code<Code>::type;
+      return E::raw_to_value(libevdev_get_event_value(raw(), E::type, enum_to_raw(code)));
     }
 
-    template <typename E>
-    std::optional<int> fetch_event_value(E event, typename E::Code code) {
+    template <typename Code>
+    std::optional<typename event_from_event_code<Code>::type::Value>
+    fetch_event_value(Code code) {
       int value;
-      if (libevdev_fetch_event_value(raw(), enum_to_raw(code), &value))
-        return value;
+      using E = event_from_event_code<Code>::type;
+      if (libevdev_fetch_event_value(raw(), E::type, enum_to_raw(code), &value))
+        return E::raw_to_value(value);
       return std::nullopt;
     }
 

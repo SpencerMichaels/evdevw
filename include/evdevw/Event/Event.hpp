@@ -33,6 +33,19 @@ namespace evdevw {
     static const int type = _type;
 
   public:
+    static Value raw_to_value(int raw) {
+      if constexpr (std::is_enum<Value>::value)
+        return raw_to_enum<Value>(raw);
+      else
+        return raw;
+    }
+
+    static int value_to_raw(Value value) {
+      if constexpr (std::is_enum<Value>::value)
+        return enum_to_raw<Value>(value);
+      else
+        return value;
+    }
     Event(Code code, Value value)
       : _code(code), _value(value)
     {
@@ -84,20 +97,6 @@ namespace evdevw {
   private:
     Code _code;
     Value _value;
-
-    static Value raw_to_value(int raw) {
-      if constexpr (std::is_enum<Value>::value)
-        return raw_to_enum<Value>(raw);
-      else
-        return raw;
-    }
-
-    static int value_to_raw(Value value) {
-      if constexpr (std::is_enum<Value>::value)
-        return enum_to_raw<Value>(value);
-      else
-        return value;
-    }
   };
 
   template <typename E>
