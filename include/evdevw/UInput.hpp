@@ -43,7 +43,7 @@ namespace evdevw {
       return util::raw_to_optional<std::string>(libevdev_uinput_get_devnode(raw()));
     }
 
-    void write_event(EventAny event_any) {
+    void write_event(event::AnyEvent event_any) {
       std::visit(util::overloaded {
         [this](const auto &event) {
           _write_event(event);

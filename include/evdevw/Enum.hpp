@@ -12,9 +12,12 @@ namespace evdevw {
     using RawType = Raw;
 
     static Enum from_raw(Raw code) {
-      if (_max > 0 && code < _max)
+      if (_max == 0 || code < _max)
         return static_cast<Enum>(code);
-      throw std::runtime_error("Invalid value for enum type!");
+
+      throw std::runtime_error(
+          std::string("Invalid value for enum type ") +
+          typeid(Enum).name() + ": " + std::to_string(code));
     }
 
     static Raw to_raw(Enum code) {
@@ -35,10 +38,6 @@ namespace evdevw {
   Enum raw_to_enum(typename convert_enum<Enum>::RawType code) {
     return convert_enum<Enum>::from_raw(code);
   }
-
-  template <typename Code>
-  struct event_from_event_code {
-  };
 
 }
 

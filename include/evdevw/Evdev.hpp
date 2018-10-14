@@ -6,7 +6,7 @@
 #include <functional>
 #include <memory>
 #include <optional>
-#include <set>
+#include <unordered_set>
 #include <string>
 #include <utility>
 
@@ -14,11 +14,11 @@
 
 #include "BusType.hpp"
 #include "ClockId.hpp"
-#include "Event/AbsoluteEvent.hpp"
-#include "Event/EventAny.hpp"
-#include "Event/KeyEvent.hpp"
-#include "Event/LedEvent.hpp"
-#include "Event/RepeatEvent.hpp"
+#include "Event/Absolute.hpp"
+#include "Event/AnyEvent.hpp"
+#include "Event/Key.hpp"
+#include "Event/Led.hpp"
+#include "Event/Repeat.hpp"
 #include "Exception.hpp"
 #include "InputProperty.hpp"
 #include "LogPriority.hpp"
@@ -202,30 +202,30 @@ namespace evdevw {
 
     template <typename Code>
     bool has_event_code(Code code) const {
-      return libevdev_has_event_code(raw(), event_from_event_code<Code>::type::type, enum_to_raw(code));
+      return libevdev_has_event_code(raw(), event::event_from_event_code<Code>::type::type, enum_to_raw(code));
     }
 
-    int get_abs_minimum(AbsoluteEventCode code) const {
+    int get_abs_minimum(event::AbsoluteCode code) const {
       return libevdev_get_abs_minimum(raw(), enum_to_raw(code));
     }
 
-    int get_abs_maximum(AbsoluteEventCode code) const {
+    int get_abs_maximum(event::AbsoluteCode code) const {
       return libevdev_get_abs_maximum(raw(), enum_to_raw(code));
     }
 
-    int get_abs_fuzz(AbsoluteEventCode code) const {
+    int get_abs_fuzz(event::AbsoluteCode code) const {
       return libevdev_get_abs_fuzz(raw(), enum_to_raw(code));
     }
 
-    int get_abs_flat(AbsoluteEventCode code) const {
+    int get_abs_flat(event::AbsoluteCode code) const {
       return libevdev_get_abs_flat(raw(), enum_to_raw(code));
     }
 
-    int get_abs_resolution(AbsoluteEventCode code) const {
+    int get_abs_resolution(event::AbsoluteCode code) const {
       return libevdev_get_abs_resolution(raw(), enum_to_raw(code));
     }
 
-    std::optional<AbsoluteInfo> get_abs_info(AbsoluteEventCode code) {
+    std::optional<AbsoluteInfo> get_abs_info(event::AbsoluteCode code) {
       auto abs_info = libevdev_get_abs_info(raw(), enum_to_raw(code));
 
       if (!abs_info)
@@ -235,17 +235,17 @@ namespace evdevw {
     }
 
     template <typename Code>
-    typename event_from_event_code<Code>::type::Value
+    typename event::event_from_event_code<Code>::type::Value
     get_event_value(Code code) const {
-      using E = event_from_event_code<Code>::type;
+      using E = typename event::event_from_event_code<Code>::type;
       return E::raw_to_value(libevdev_get_event_value(raw(), E::type, enum_to_raw(code)));
     }
 
     template <typename Code>
-    std::optional<typename event_from_event_code<Code>::type::Value>
+    std::optional<typename event::event_from_event_code<Code>::type::Value>
     fetch_event_value(Code code) {
       int value;
-      using E = event_from_event_code<Code>::type;
+      using E = typename event::event_from_event_code<Code>::type;
       if (libevdev_fetch_event_value(raw(), E::type, enum_to_raw(code), &value))
         return E::raw_to_value(value);
       return std::nullopt;
@@ -262,11 +262,11 @@ namespace evdevw {
     // MULTI-TOUCH RELATED FUNCTIONS //
     ///////////////////////////////////
 
-    int get_slot_value(int slot, AbsoluteEventCode code) const {
+    int get_slot_value(int slot, event::AbsoluteCode code) const {
       return libevdev_get_slot_value(raw(), slot, enum_to_raw(code));
     }
 
-    std::optional<int> fetch_slot_value(int slot, AbsoluteEventCode code) const {
+    std::optional<int> fetch_slot_value(int slot, event::AbsoluteCode code) const {
       int value;
       if (libevdev_fetch_slot_value(raw(), slot, enum_to_raw(code), &value))
         return value;
@@ -330,27 +330,27 @@ namespace evdevw {
         throw Exception(err);
     }
 
-    void set_abs_minimum(AbsoluteEventCode code, int minimum) const {
+    void set_abs_minimum(event::AbsoluteCode code, int minimum) const {
       libevdev_set_abs_minimum(raw(), enum_to_raw(code), minimum);
     }
 
-    void set_abs_maximum(AbsoluteEventCode code, int maximum) const {
+    void set_abs_maximum(event::AbsoluteCode code, int maximum) const {
       libevdev_set_abs_maximum(raw(), enum_to_raw(code), maximum);
     }
 
-    void set_abs_fuzz(AbsoluteEventCode code, int fuzz) const {
+    void set_abs_fuzz(event::AbsoluteCode code, int fuzz) const {
       libevdev_set_abs_fuzz(raw(), enum_to_raw(code), fuzz);
     }
 
-    void set_abs_flat(AbsoluteEventCode code, int flat) const {
+    void set_abs_flat(event::AbsoluteCode code, int flat) const {
       libevdev_set_abs_flat(raw(), enum_to_raw(code), flat);
     }
 
-    void set_abs_resolution(AbsoluteEventCode code, int resolution) const {
+    void set_abs_resolution(event::AbsoluteCode code, int resolution) const {
       libevdev_set_abs_resolution(raw(), enum_to_raw(code), resolution);
     }
 
-    void set_abs_info(AbsoluteEventCode code, AbsoluteInfo info) const {
+    void set_abs_info(event::AbsoluteCode code, AbsoluteInfo info) const {
       const auto info_raw = info.to_raw();
       libevdev_set_abs_info(raw(), enum_to_raw(code), &info_raw);
     }
@@ -367,16 +367,16 @@ namespace evdevw {
         throw Exception(err);
     }
 
-    void enable_event_code(AbsoluteEventCode code, AbsoluteInfo info) const {
+    void enable_event_code(event::AbsoluteCode code, AbsoluteInfo info) const {
       const auto info_raw = info.to_raw();
       if (const auto err = libevdev_enable_event_code(
-          raw(), event_from_event_code<AbsoluteEventCode>::type::type, enum_to_raw(code), (void*)&info_raw))
+          raw(), event::Absolute::type, enum_to_raw(code), (void*)&info_raw))
         throw Exception(err);
     }
 
-    void enable_event_code(RepeatEventCode code, int axis_data) const {
+    void enable_event_code(event::RepeatCode code, int axis_data) const {
       if (const auto err = libevdev_enable_event_code(
-          raw(), event_from_event_code<AbsoluteEventCode>::type::type, enum_to_raw(code), (void*)&axis_data))
+          raw(), event::Repeat::type, enum_to_raw(code), (void*)&axis_data))
         throw Exception(err);
     }
 
@@ -392,13 +392,13 @@ namespace evdevw {
         throw Exception(err);
     }
 
-    void kernel_set_abs_info(AbsoluteEventCode code, AbsoluteInfo info) const {
+    void kernel_set_abs_info(event::AbsoluteCode code, AbsoluteInfo info) const {
       const auto info_raw = info.to_raw();
       if (const auto err = libevdev_kernel_set_abs_info(raw(), enum_to_raw(code), &info_raw))
         throw Exception(err);
     }
 
-    void kernel_set_led_value(LedEventCode code, LedEventValue value) const {
+    void kernel_set_led_value(event::LedCode code, event::LedValue value) const {
       if (const auto err = libevdev_kernel_set_led_value(raw(), enum_to_raw(code), (libevdev_led_value)enum_to_raw(value)))
         throw Exception(err);
     }
@@ -417,7 +417,7 @@ namespace evdevw {
         throw Exception(err);
     }
 
-    std::optional<std::pair<ReadStatus, EventAny>> next_event(std::set<ReadFlag> flags) const {
+    std::optional<std::pair<ReadStatus, event::AnyEvent>> next_event(std::unordered_set<ReadFlag> flags) const {
       struct input_event raw_event;
       int raw_flags = 0;
 
@@ -428,39 +428,41 @@ namespace evdevw {
 
       if (ret == -EAGAIN) {
         return std::nullopt;
-      } else if (ret == LIBEVDEV_READ_STATUS_SYNC) {
-        return std::make_pair(ReadStatus::Sync, SynchronizeEvent(raw_event));
-      } else if (ret == LIBEVDEV_READ_STATUS_SUCCESS) {
-        switch (raw_event.type) {
-          case EV_SYN:
-            return std::make_pair(ReadStatus::Success, SynchronizeEvent(raw_event));
-          case EV_KEY:
-            return std::make_pair(ReadStatus::Success, KeyEvent(raw_event));
-          case EV_REL:
-            return std::make_pair(ReadStatus::Success, RelativeEvent(raw_event));
-          case EV_ABS:
-            return std::make_pair(ReadStatus::Success, AbsoluteEvent(raw_event));
-          case EV_MSC:
-            return std::make_pair(ReadStatus::Success, MiscEvent(raw_event));
-          case EV_SW:
-            return std::make_pair(ReadStatus::Success, SwitchEvent(raw_event));
-          case EV_LED:
-            return std::make_pair(ReadStatus::Success, LedEvent(raw_event));
-          case EV_SND:
-            return std::make_pair(ReadStatus::Success, SoundEvent(raw_event));
-          case EV_REP:
-            return std::make_pair(ReadStatus::Success, RepeatEvent(raw_event));
-          case EV_FF:
-            return std::make_pair(ReadStatus::Success, ForceFeedbackEvent(raw_event));
-          case EV_PWR:
-            return std::make_pair(ReadStatus::Success, PowerEvent(raw_event));
-          case EV_FF_STATUS:
-            return std::make_pair(ReadStatus::Success, ForceFeedbackStatusEvent(raw_event));
-          default:
-            throw std::runtime_error("Invalid event type!");
-        }
       } else if (ret < 0) {
         throw Exception(-ret);
+      }
+
+      const auto status = (ret == LIBEVDEV_READ_STATUS_SYNC)
+          ? ReadStatus::Sync
+          : ReadStatus::Success;
+
+      switch (raw_event.type) {
+        case EV_SYN:
+          return std::make_pair(status, event::Synchronize(raw_event));
+        case EV_KEY:
+          return std::make_pair(status, event::Key(raw_event));
+        case EV_REL:
+          return std::make_pair(status, event::Relative(raw_event));
+        case EV_ABS:
+          return std::make_pair(status, event::Absolute(raw_event));
+        case EV_MSC:
+          return std::make_pair(status, event::Misc(raw_event));
+        case EV_SW:
+          return std::make_pair(status, event::Switch(raw_event));
+        case EV_LED:
+          return std::make_pair(status, event::Led(raw_event));
+        case EV_SND:
+          return std::make_pair(status, event::Sound(raw_event));
+        case EV_REP:
+          return std::make_pair(status, event::Repeat(raw_event));
+        case EV_FF:
+          return std::make_pair(status, event::ForceFeedback(raw_event));
+        case EV_PWR:
+          return std::make_pair(status, event::Power(raw_event));
+        case EV_FF_STATUS:
+          return std::make_pair(status, event::ForceFeedbackStatus(raw_event));
+        default:
+          throw std::runtime_error("Invalid event type!");
       }
     }
 
@@ -491,7 +493,7 @@ namespace evdevw {
       std::string message(message_cstr);
       free(message_cstr);
 
-      self->_device_log_fn_data->device_log_fn(*self, raw_to_enum<LogPriority >(priority),
+      self->_device_log_fn_data->device_log_fn(*self, raw_to_enum<LogPriority>(priority),
           self->_device_log_fn_data->data, file, line, func, message);
     }
 
@@ -500,7 +502,7 @@ namespace evdevw {
     }
 
     template <typename... Tail>
-    static auto convert_led_code_value(LedEventCode head_code, LedEventValue head_value, Tail... tail) {
+    static auto convert_led_code_value(event::LedCode head_code, event::LedValue head_value, Tail... tail) {
       return std::tuple_cat(std::make_tuple(
           enum_to_raw(head_code),
           (libevdev_led_value)enum_to_raw(head_value)),

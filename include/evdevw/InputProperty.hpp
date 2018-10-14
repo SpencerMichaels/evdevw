@@ -18,11 +18,11 @@ namespace evdevw {
   template <>
   struct convert_enum<InputProperty> : public _convert_enum_impl<InputProperty, int, 0> {};
 
-  std::string input_property_get_name(InputProperty input_property) {
+  inline std::string input_property_get_name(InputProperty input_property) {
     return libevdev_property_get_name(enum_to_raw(input_property));
   }
 
-  std::optional<InputProperty> input_property_from_name(const std::string &name) {
+  inline std::optional <InputProperty> input_property_from_name(const std::string &name) {
     auto raw_input_property = libevdev_property_from_name(name.c_str());
     if (raw_input_property < 0)
       return std::nullopt;

@@ -7,22 +7,28 @@
 #include "../Utility.hpp"
 
 #define DECLARE_EVENT_TYPE(_raw_type, _type, _code_type, _value_type)   \
-  struct _type : public Event<_raw_type, _code_type, _value_type> {     \
-    _type(_code_type code, _value_type value)                           \
-        : Event<_raw_type, _code_type, _value_type>(code, value)        \
-    {                                                                   \
-    }                                                                   \
-    _type(struct input_event event)                                     \
-        : Event<_raw_type, _code_type, _value_type>(event)              \
-    {                                                                   \
-    }                                                                   \
-  };                                                                    \
-  template <>                                                           \
-  struct event_from_event_code<_code_type> {                            \
-    using type = _type;                                                 \
-  };
+  namespace event {                                                     \
+    struct _type : public Event<_raw_type, _code_type, _value_type> {   \
+      _type(_code_type code, _value_type value)                         \
+          : Event<_raw_type, _code_type, _value_type>(code, value)      \
+      {                                                                 \
+      }                                                                 \
+      _type(struct input_event event)                                   \
+          : Event<_raw_type, _code_type, _value_type>(event)            \
+      {                                                                 \
+      }                                                                 \
+    };                                                                  \
+    template <>                                                         \
+    struct event_from_event_code<_code_type> {                          \
+      using type = _type;                                               \
+    };                                                                  \
+  }
 
-namespace evdevw {
+namespace evdevw::event {
+
+  template <typename Code>
+  struct event_from_event_code {
+  };
 
   template <uint16_t _type, typename _Code, typename _Value>
   struct Event {
@@ -55,7 +61,10 @@ namespace evdevw {
         : _code(raw_to_enum<Code>(event.code)), _value(raw_to_value(event.value))
     {
       if (event.type != type)
-        throw std::runtime_error("Event type mismatch!");
+        throw std::runtime_error(
+            std::string("Raw type mismatch for event type ") +
+            typeid(decltype(*this)).name() + ": got " + std::to_string(event.type) +
+            ", expected " + std::to_string(type));
     }
 
     Event(uint16_t raw_code, Value value)
